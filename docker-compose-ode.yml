@@ -1,0 +1,38 @@
+# ODE deployment overlay.
+#
+# Combined local mode (zip-file testing):
+#   docker compose -f docker-compose.yml -f docker-compose-ode.yml up -d
+#   Filebeat ships to the local Logstash (default LOGSTASH_URL=logstash:5044).
+#   Logstash accepts events from both its direct file-read and Beats inputs;
+#   ES deduplicates via document_id (event_id), so no duplicate records appear.
+#
+# ODE-only mode (production pod, no local ELK stack):
+#   LOGSTASH_URL=<remote-host:5044> docker compose -f docker-compose-ode.yml --profile ode up -d
+#   Filebeat ships to the remote Logstash.  bsm_agent connects to the ODE Kafka broker.
+
+services:
+
+  filebeat:
+    image: docker.elastic.co/beats/filebeat:8.12.2
+    container_name: mbd-filebeat
+    user: root
+    environment:
+      - LOGSTASH_URL=${LOGSTASH_URL:-logstash:5044}
+    volumes:
+      - ./elk/filebeat/filebeat.yml:/usr/share/filebeat/filebeat.yml:ro
+      - ./logs:/mbd/logs:ro
+    restart: unless-stopped
+
+  bsm_agent:
+    build:
+      context: .
+      dockerfile: Dockerfile.agent
+    container_name: mbd-bsm-agent
+    profiles:
+      - ode
+    environment:
+      - ODE_CONFIG=/app/ode_config.json
+    volumes:
+      - ./ode_config.json:/app/ode_config.json:ro
+      - ./logs:/mbd/logs
+    restart: unless-stopped

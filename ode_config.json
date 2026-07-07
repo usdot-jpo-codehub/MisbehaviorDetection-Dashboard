@@ -1,0 +1,83 @@
+{
+  "logstash": {
+    "url": "tcp://logstash:5044"
+  },
+
+  "kafka": {
+    "bootstrap_servers": "kafka:9092",
+    "topic":             "topic.OdeBsmJson",
+    "group_id":          "bsm_mbd_group"
+  },
+
+  "confirm_n": 2,
+
+  "cooldown": {
+    "meters":  50.0,
+    "seconds": 30.0
+  },
+
+  "speed": {
+    "threshold_kmh": 200.0
+  },
+
+  "accel": {
+    "threshold_g": 1.0
+  },
+
+  "brakes": {
+    "accel_braking_threshold_g":   1.0,
+    "decel_no_brakes_threshold_g": 1.0
+  },
+
+  "position_jump": {
+    "max_jump_speed_kmh": 10.0,
+    "min_jump_meters":   100.0,
+    "max_gps_accuracy_m":  5.0,
+    "min_gap_seconds":    0.05,
+    "max_gap_seconds":    0.15
+  },
+
+  "heading_inconsistency": {
+    "max_heading_diff_deg": 90.0,
+    "speed_gate_kmh":       20.0,
+    "max_gps_accuracy_m":    5.0,
+    "min_distance_m":        5.0,
+    "min_gap_seconds":      0.05,
+    "max_gap_seconds":      0.15
+  },
+
+  "speed_position": {
+    "max_speed_diff_kmh":    500.0,
+    "speed_gate_kmh":         10.0,
+    "max_heading_change_deg": 30.0,
+    "max_gps_accuracy_m":      5.0,
+    "min_gap_seconds":        0.05,
+    "max_gap_seconds":        0.15,
+    "min_distance_m":          5.0
+  },
+
+  "speed_accel": {
+    "max_delta_error_ms":  5.0,
+    "min_gap_seconds":    0.05,
+    "max_gap_seconds":    0.15,
+    "min_delta_speed_kmh": 20.0
+  },
+
+  "heading_change_rate": {
+    "max_heading_rate_deg_s": 90.0,
+    "speed_gate_kmh":         20.0,
+    "max_gps_accuracy_m":      5.0,
+    "min_gap_seconds":        0.05,
+    "max_gap_seconds":        0.15,
+    "min_distance_m":          5.0
+  },
+
+  "yaw_rate": {
+    "max_yaw_diff_deg_s": 90.0,
+    "speed_gate_kmh":     20.0,
+    "max_gps_accuracy_m":  5.0,
+    "min_gap_seconds":    0.05,
+    "max_gap_seconds":    0.15,
+    "min_distance_m":      5.0
+  }
+}

@@ -1,0 +1,74 @@
+{
+  "index_patterns": ["mbd-misbehaviors", "mbd-misbehaviors-*"],
+  "priority": 100,
+  "template": {
+    "settings": {
+      "number_of_shards": 1,
+      "number_of_replicas": 0
+    },
+    "mappings": {
+      "runtime": {
+        "replay_url": {
+          "type": "keyword",
+          "script": {
+            "source": "if (!doc['vehicle_id'].empty && !doc['record_generated_at'].empty) { emit('http://localhost:8765/replay?vehicle_id=' + doc['vehicle_id'].value + '&time_at=' + doc['record_generated_at'].value); }"
+          }
+        }
+      },
+      "properties": {
+        "@timestamp":          { "type": "date" },
+        "detected_at":         { "type": "date" },
+        "record_generated_at": { "type": "keyword" },
+        "rsu_id":              { "type": "keyword" },
+        "bsm_source":          { "type": "keyword" },
+        "vehicle_id":          { "type": "keyword" },
+        "event_id":            { "type": "keyword" },
+        "msg_cnt":             { "type": "keyword" },
+        "location":            { "type": "geo_point" },
+        "misbehavior":         { "type": "keyword" },
+
+        "speed_kmh":           { "type": "float" },
+        "threshold_kmh":       { "type": "float" },
+        "speed_raw":           { "type": "integer" },
+
+        "accel_g":             { "type": "float" },
+        "accel_ms2":           { "type": "float" },
+        "threshold_g":         { "type": "float" },
+        "threshold_ms2":       { "type": "float" },
+        "accel_raw":           { "type": "integer" },
+        "wheel_brakes":        { "type": "keyword" },
+
+        "jump_m":              { "type": "float" },
+        "elapsed_s":           { "type": "float" },
+        "implied_speed_kmh":   { "type": "float" },
+        "prev_lat":            { "type": "float" },
+        "prev_lon":            { "type": "float" },
+
+        "reported_heading":    { "type": "float" },
+        "gps_bearing":         { "type": "float" },
+        "heading_diff":        { "type": "float" },
+        "threshold_deg":       { "type": "float" },
+        "distance_m":          { "type": "float" },
+
+        "heading_rate_deg_s":  { "type": "float" },
+        "heading_diff_deg":    { "type": "float" },
+        "threshold_deg_s":     { "type": "float" },
+
+        "reported_speed_kmh":  { "type": "float" },
+        "diff_kmh":            { "type": "float" },
+        "diff_abs_kmh":        { "type": "float" },
+        "direction":           { "type": "keyword" },
+
+        "observed_delta_ms":   { "type": "float" },
+        "expected_delta_ms":   { "type": "float" },
+        "error_ms":            { "type": "float" },
+        "error_kmh":           { "type": "float" },
+        "threshold_ms":        { "type": "float" },
+
+        "reported_yaw_deg_s":  { "type": "float" },
+        "gps_yaw_rate_deg_s":  { "type": "float" },
+        "yaw_diff_deg_s":      { "type": "float" }
+      }
+    }
+  }
+}

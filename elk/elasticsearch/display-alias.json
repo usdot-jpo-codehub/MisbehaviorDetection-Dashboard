@@ -1,0 +1,211 @@
+{
+  "actions": [
+    {
+      "add": {
+        "index": "mbd-misbehaviors*",
+        "alias": "mbd-display",
+        "filter": {
+          "bool": {
+            "should": [
+              {
+                "bool": {
+                  "filter": [
+                    {
+                      "term": {
+                        "misbehavior": "speed_exceeded"
+                      }
+                    },
+                    {
+                      "range": {
+                        "speed_kmh": {
+                          "gte": 200
+                        }
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "bool": {
+                  "filter": [
+                    {
+                      "term": {
+                        "misbehavior": "accel_exceeded"
+                      }
+                    },
+                    {
+                      "range": {
+                        "accel_g": {
+                          "gte": 1.5
+                        }
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "bool": {
+                  "filter": [
+                    {
+                      "term": {
+                        "misbehavior": "position_jump"
+                      }
+                    },
+                    {
+                      "range": {
+                        "jump_m": {
+                          "gte": 500
+                        }
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "bool": {
+                  "filter": [
+                    {
+                      "term": {
+                        "misbehavior": "heading_inconsistency"
+                      }
+                    },
+                    {
+                      "range": {
+                        "heading_diff": {
+                          "gte": 179.99
+                        }
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "bool": {
+                  "filter": [
+                    {
+                      "term": {
+                        "misbehavior": "implausible_heading_change_rate"
+                      }
+                    },
+                    {
+                      "range": {
+                        "heading_rate_deg_s": {
+                          "gte": 1000
+                        }
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "bool": {
+                  "filter": [
+                    {
+                      "term": {
+                        "misbehavior": "speed_position_inconsistency"
+                      }
+                    },
+                    {
+                      "bool": {
+                        "should": [
+                          {
+                            "range": {
+                              "diff_kmh": {
+                                "gte": 20000
+                              }
+                            }
+                          },
+                          {
+                            "range": {
+                              "diff_kmh": {
+                                "lte": -20000
+                              }
+                            }
+                          }
+                        ],
+                        "minimum_should_match": 1
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "bool": {
+                  "filter": [
+                    {
+                      "term": {
+                        "misbehavior": "speed_accel_inconsistency"
+                      }
+                    },
+                    {
+                      "range": {
+                        "error_kmh": {
+                          "gte": 110
+                        }
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "bool": {
+                  "filter": [
+                    {
+                      "term": {
+                        "misbehavior": "yaw_rate_inconsistency"
+                      }
+                    },
+                    {
+                      "range": {
+                        "yaw_diff_deg_s": {
+                          "gte": 1000
+                        }
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "bool": {
+                  "filter": [
+                    {
+                      "term": {
+                        "misbehavior": "brakes_on_no_decel"
+                      }
+                    },
+                    {
+                      "range": {
+                        "accel_g": {
+                          "gte": 1.0
+                        }
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "bool": {
+                  "filter": [
+                    {
+                      "term": {
+                        "misbehavior": "decel_no_brakes"
+                      }
+                    },
+                    {
+                      "range": {
+                        "accel_g": {
+                          "lte": -1.5
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            ],
+            "minimum_should_match": 1
+          }
+        }
+      }
+    }
+  ]
+}

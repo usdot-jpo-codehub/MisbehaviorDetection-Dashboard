@@ -1,0 +1,70 @@
+{
+  "_doc": [
+    "Level-2 display thresholds for the  mbd-display  Elasticsearch alias.",
+    "Edit the values below and run:  python manage_display_filter.py",
+    "to push the new filter to Elasticsearch — no data re-ingestion needed.",
+    "",
+    "Each misbehavior type lists the field(s) that must ALL be satisfied for",
+    "a record to appear in the filtered Kibana view.  Units are consistent:",
+    "  km/h  for speeds and speed differences",
+    "  m     for distances and position jumps",
+    "  g     for accelerations  (1 g = 9.80665 m/s²)",
+    "  °     for heading angles",
+    "  °/s   for angular rates",
+    "",
+    "Range conditions use Elasticsearch range syntax:",
+    "  { \"gte\": X }  →  field >= X",
+    "  { \"lte\": X }  →  field <= X",
+    "  { \"gt\":  X }  →  field >  X",
+    "  { \"lt\":  X }  →  field <  X",
+    "Multiple conditions on the same field are AND-ed together.",
+    "A list of conditions on the same field are OR-ed together, e.g.:",
+    "  \"diff_kmh\": [{\"gte\": 500}, {\"lte\": -500}]  →  diff >= 500 OR diff <= -500",
+    "",
+    "Run  python manage_display_filter.py --show  to inspect the live alias."
+  ],
+
+  "level2": {
+
+    "speed_exceeded": {
+      "speed_kmh": { "gte": 200 }
+    },
+
+    "accel_exceeded": {
+      "accel_g": { "gte": 1.5 }
+    },
+
+    "position_jump": {
+      "jump_m": { "gte": 500 }
+    },
+
+    "heading_inconsistency": {
+      "heading_diff": { "gte": 179.99 }
+    },
+
+    "implausible_heading_change_rate": {
+      "heading_rate_deg_s": { "gte": 1000 }
+    },
+
+    "speed_position_inconsistency": {
+      "diff_kmh": [{ "gte": 20000 }, { "lte": -20000 }]
+    },
+
+    "speed_accel_inconsistency": {
+      "error_kmh": { "gte": 110 }
+    },
+
+    "yaw_rate_inconsistency": {
+      "yaw_diff_deg_s": { "gte": 1000 }
+    },
+
+    "brakes_on_no_decel": {
+      "accel_g": { "gte": 1.0 }
+    },
+
+    "decel_no_brakes": {
+      "accel_g": { "lte": -1.5 }
+    }
+
+  }
+}
